@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>교생 안내 보드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p id="boardEyebrow" class="eyebrow">Teacher Residency Board</p>
+        <h1 id="boardTitle">2학년 5반 교생 안내 보드</h1>
+      </div>
+      <div class="topbar-meta">
+        <div class="meta-chip">
+          <span class="meta-label">오늘</span>
+          <strong id="todayLabel">날짜 불러오는 중</strong>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="mobile-home">
+        <div class="mobile-hero card">
+          <div>
+            <p class="section-label">모바일 홈</p>
+            <h2 id="mobileHeroTitle">필요한 메뉴만 바로 보기</h2>
+            <p id="mobileHeroDescription" class="muted">모바일에서는 첫 화면에 아이콘 메뉴만 두고, 각 메뉴는 별도 페이지에서 열리도록 구성했습니다.</p>
+          </div>
+          <div class="status-badge">
+            <span id="mobileHighlightLabel">오늘 안내</span>
+            <strong id="mobileHighlightValue">전달사항과 급식을 먼저 확인해 주세요.</strong>
+          </div>
+        </div>
+
+        <div class="icon-grid">
+          <a class="icon-tile link-tile" href="notices.html">
+            <span class="icon">공</span>
+            <strong>전달사항</strong>
+            <small>공지 전용 페이지</small>
+          </a>
+          <a class="icon-tile link-tile" href="timetable.html">
+            <span class="icon">표</span>
+            <strong>시간표</strong>
+            <small>담임·학급 시간표</small>
+          </a>
+          <a class="icon-tile link-tile" href="lunch.html">
+            <span class="icon">식</span>
+            <strong>급식</strong>
+            <small>오늘 메뉴 보기</small>
+          </a>
+          <a class="icon-tile link-tile" href="roster.html">
+            <span class="icon">명</span>
+            <strong>명렬표</strong>
+            <small>학생 사진 보기</small>
+          </a>
+          <a class="icon-tile link-tile" href="cleanup.html">
+            <span class="icon">청</span>
+            <strong>청소표</strong>
+            <small>청소 배정 보기</small>
+          </a>
+          <a class="icon-tile link-tile" href="roles.html">
+            <span class="icon">역</span>
+            <strong>1인 1역</strong>
+            <small>역할 배정 보기</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="tablet-dashboard">
+        <div class="tablet-grid">
+          <article class="card calendar-card">
+            <div class="panel-head">
+              <p class="section-label">주간 일정</p>
+              <span id="tabletMonthBadge" class="panel-chip lavender">이번 달</span>
+            </div>
+            <h2 id="tabletCalendarTitle">이번 달 학급 일정</h2>
+            <div id="tabletCalendarMini" class="calendar-mini"></div>
+            <div id="tabletEventList" class="calendar-notes"></div>
+            <div id="tabletSelectedDateBox" class="selected-date-box strong">
+              <p class="selected-date-title">선택한 날짜 일정</p>
+              <div id="tabletSelectedDateContent" class="selected-date-content muted">달력 날짜를 누르면 해당 날짜 일정이 여기에 표시됩니다.</div>
+            </div>
+          </article>
+
+          <article class="card stack-card">
+            <div class="panel-head">
+              <p class="section-label">전달사항</p>
+              <span class="panel-chip coral">상단 고정</span>
+            </div>
+            <h2 id="tabletNoticeTitle">오늘 전달사항</h2>
+            <div id="tabletNoticeList" class="notice-list"></div>
+          </article>
+
+          <article class="card stack-card">
+            <div class="panel-head">
+              <p class="section-label">오늘 급식</p>
+              <span id="tabletLunchBadge" class="panel-chip mint">오늘 급식</span>
+            </div>
+            <h2>급식 카드</h2>
+            <p id="tabletLunchDescription" class="muted">급식 정보를 불러오는 중입니다.</p>
+            <ul id="tabletLunchList" class="plain-list compact"></ul>
+          </article>
+
+          <article class="card timetable-card">
+            <div class="panel-head">
+              <p class="section-label">담임 시간표</p>
+              <span class="panel-chip amber">현재 교시 강조</span>
+            </div>
+            <h2 id="tabletPersonalTitle">담임 시간표</h2>
+            <div id="tabletPersonalGrid" class="period-grid"></div>
+          </article>
+
+          <article class="card timetable-card">
+            <div class="panel-head">
+              <p class="section-label">학급 시간표</p>
+              <span id="tabletClassBadge" class="panel-chip sky">주간 보기</span>
+            </div>
+            <h2 id="tabletClassTitle">2학년 5반 시간표</h2>
+            <div id="tabletClassList" class="period-grid timetable-grid"></div>
+          </article>
+
+          <article class="card wide-card">
+            <div class="panel-head">
+              <p class="section-label">자주 보는 자료</p>
+              <span class="panel-chip sky">바로가기</span>
+            </div>
+            <h2>자료 모음</h2>
+            <div id="tabletQuickLinks" class="quick-links"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="desktop-dashboard">
+        <div class="desktop-grid">
+          <div class="desktop-main">
+            <article class="card desktop-calendar">
+              <div class="panel-head">
+                <p class="section-label">캘린더</p>
+                <span id="desktopMonthBadge" class="panel-chip lavender">이번 달</span>
+              </div>
+              <div id="desktopCalendarBoard" class="calendar-board"></div>
+              <div id="desktopSelectedDateBox" class="selected-date-box strong">
+                <p class="selected-date-title">선택한 날짜 일정</p>
+                <div id="desktopSelectedDateContent" class="selected-date-content muted">달력 날짜를 누르면 해당 날짜 일정이 여기에 표시됩니다.</div>
+              </div>
+            </article>
+
+            <div class="desktop-timetable-row">
+              <article class="card desktop-list-card">
+                <div class="panel-head">
+                  <p class="section-label">담임 시간표</p>
+                  <span class="panel-chip lavender">주간 보기</span>
+                </div>
+                <div id="desktopPersonalList" class="period-grid timetable-grid"></div>
+              </article>
+
+              <article class="card desktop-list-card">
+                <div class="panel-head">
+                  <p class="section-label">학급 시간표</p>
+                  <span id="desktopClassBadge" class="panel-chip sky">주간 보기</span>
+                </div>
+                <div id="desktopClassList" class="period-grid timetable-grid"></div>
+              </article>
+            </div>
+          </div>
+
+          <div class="desktop-side">
+            <article class="card desktop-list-card">
+              <div class="panel-head">
+                <p class="section-label">전달사항</p>
+                <span class="panel-chip coral">오늘 고정</span>
+              </div>
+              <h2 id="desktopNoticeTitle">오늘 전달사항</h2>
+              <div id="desktopNoticeList" class="notice-list"></div>
+            </article>
+
+            <article class="card desktop-list-card">
+              <div class="panel-head">
+                <p class="section-label">오늘 급식</p>
+                <span id="desktopLunchBadge" class="panel-chip mint">오늘 급식</span>
+              </div>
+              <p id="desktopLunchDescription" class="muted">급식 정보를 불러오는 중입니다.</p>
+              <ul id="desktopLunchList" class="plain-list compact"></ul>
+            </article>
+
+            <article class="card desktop-list-card">
+              <div class="panel-head">
+                <p class="section-label">자주 보는 자료</p>
+                <span class="panel-chip sky">바로가기</span>
+              </div>
+              <div id="desktopQuickLinks" class="quick-links vertical"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="dashboard-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+config.local.json
+extracted_pdf_images/
+foodsafety_page.html
+_check_bad_photos.py
+_check_pdf_mods.py
+_copy_photos.py
+_extract_pdf_images.py
+_fix_wide_photos.py
+_inspect_pdf.py
+_inspect_pdf_images.py
+_link_photos.py
+_render_pdf.py
+_test_fix.py
