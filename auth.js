@@ -1,5 +1,5 @@
 ﻿(() => {
-  const PIN = "2505";
+  const PIN = "2525";
   const STORAGE_KEY = "teacher-residency-board-unlocked";
 
   const isUnlocked = () => sessionStorage.getItem(STORAGE_KEY) === "true";
