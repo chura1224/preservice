@@ -1,5 +1,6 @@
 ﻿const dashboard = window.__DASHBOARD_DATA__;
 const page = document.body.dataset.page;
+let timetableRefreshHandle = null;
 
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
@@ -32,7 +33,14 @@ function queueScrollReset() {
   });
 }
 
-if (dashboard && page) {
+document.addEventListener("DOMContentLoaded", initializeDetailPage);
+window.addEventListener("pageshow", initializeDetailPage);
+
+function initializeDetailPage() {
+  if (!dashboard || !page) {
+    return;
+  }
+
   if (page === "roster") {
     text("rosterSectionTitle", dashboard.roster.title || "학생 사진 명렬표");
     text("rosterSectionDescription", dashboard.roster.description || "");
@@ -59,7 +67,9 @@ if (dashboard && page) {
     text("timetableSectionTitle", "시간표");
     text("timetableSectionDescription", "현재 시각에 해당하는 교시가 자동으로 강조되며, 6교시 뒤 청소시간도 함께 표시됩니다.");
     renderTimetablePage();
-    window.setInterval(renderTimetablePage, 30000);
+    if (!timetableRefreshHandle) {
+      timetableRefreshHandle = window.setInterval(renderTimetablePage, 30000);
+    }
   }
 
   if (page === "lunch") {
@@ -421,5 +431,7 @@ function parseClock(value) {
   const [hour, minute] = String(value).split(":").map(Number);
   return hour * 60 + minute;
 }
+
+
 
 
