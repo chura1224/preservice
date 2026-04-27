@@ -152,6 +152,6 @@ window.__DASHBOARD_DATA__ = {
     { title: "학생 사진 명렬표", href: "roster.html" },
     { title: "청소표", href: "cleanup.html" },
     { title: "1인 1역", href: "roles.html" },
-    { title: "전달사항" }
+    { title: "전달사항", href: "notices.html" }
   ]
 };
