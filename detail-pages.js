@@ -35,6 +35,8 @@ function queueScrollReset() {
 
 document.addEventListener("DOMContentLoaded", initializeDetailPage);
 window.addEventListener("pageshow", initializeDetailPage);
+initializeDetailPage();
+window.setTimeout(initializeDetailPage, 0);
 
 function initializeDetailPage() {
   if (!dashboard || !page) {
