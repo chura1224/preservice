@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>???</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="calendar">
+  <div class="app-shell subpage-shell">
+    <header class="subpage-header">
+      <a class="back-link" href="index.html">???? ????</a>
+      <div>
+        <p class="eyebrow">Class Calendar</p>
+        <h1 id="calendarSectionTitle">?? ???</h1>
+        <p id="calendarSectionDescription" class="muted">??? ??? ?? ?? ??? ???? ?? ??? ? ????.</p>
+      </div>
+    </header>
+
+    <section class="card cleanup-showcase">
+      <div class="panel-head">
+        <p class="section-label">???</p>
+        <span id="calendarPageMonthBadge" class="panel-chip lavender">?? ?</span>
+      </div>
+      <div id="calendarPageBoard" class="calendar-board"></div>
+      <div class="selected-date-box strong">
+        <p class="selected-date-title">??? ?? ??</p>
+        <div id="calendarPageSelectedContent" class="selected-date-content muted">?? ??? ??? ?? ?? ??? ??? ?????.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="dashboard-data.js"></script>
+  <script src="auth.js"></script>
+  <script src="detail-pages.js"></script>
+</body>
+</html>

@@ -1,5 +1,8 @@
 ﻿const dashboard = window.__DASHBOARD_DATA__;
 const page = document.body.dataset.page;
+const detailState = {
+  selectedDate: formatIsoDate(new Date())
+};
 let timetableRefreshHandle = null;
 let layoutRefreshHandle = null;
 
@@ -63,6 +66,14 @@ function initializeDetailPage() {
 
   if (page === "cleanup") {
     renderCleanupGrid("cleanupGrid", dashboard.cleanup || []);
+  }
+
+  if (page === "calendar") {
+    text("calendarSectionTitle", `${dashboard.board?.roomLabel || "2?? 5?"} ?? ???`);
+    text("calendarSectionDescription", "??? ??? ?? ?? ??? ???? ?? ??? ? ????.");
+    text("calendarPageMonthBadge", `${new Date().getMonth() + 1}?`);
+    renderCalendarPage();
+    bindCalendarPageSelection();
   }
 
   if (page === "notices") {
@@ -435,6 +446,105 @@ function renderTimetablePage() {
   renderScheduleGrid("subpageClassGrid", dashboard.classTimetable, todayDayName, currentSlot, dashboard.periodTimes || []);
 }
 
+function renderCalendarPage() {
+  renderCalendarBoard("calendarPageBoard", dashboard.events || [], new Date(), detailState.selectedDate);
+  renderCalendarSelectedContent(detailState.selectedDate);
+}
+
+function bindCalendarPageSelection() {
+  const element = document.getElementById("calendarPageBoard");
+  if (!element || element.dataset.bound === "true") {
+    return;
+  }
+
+  element.dataset.bound = "true";
+  element.addEventListener("click", (event) => {
+    const dateCell = event.target.closest("[data-date]");
+    if (!dateCell) {
+      return;
+    }
+    detailState.selectedDate = dateCell.dataset.date;
+    renderCalendarPage();
+  });
+}
+
+function renderCalendarSelectedContent(selectedDate) {
+  const events = (dashboard.events || []).filter((item) => item.date === selectedDate);
+  const content = buildSelectedDateContent(selectedDate, events);
+  const element = document.getElementById("calendarPageSelectedContent");
+  if (element) {
+    element.innerHTML = content;
+  }
+}
+
+function buildSelectedDateContent(selectedDate, events) {
+  const title = `<strong>${escapeHtml(formatDateDisplay(selectedDate))}</strong>`;
+  if (!events.length) {
+    return `${title}<div class="selected-date-empty">??? ??? ????.</div>`;
+  }
+
+  const items = events.map((event) => `<li>${escapeHtml(event.title)}</li>`).join("");
+  return `${title}<ul class="selected-date-list">${items}</ul>`;
+}
+
+function renderCalendarBoard(targetId, events, today, selectedDate) {
+  const element = document.getElementById(targetId);
+  if (!element) {
+    return;
+  }
+
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDate = new Date(year, month + 1, 0).getDate();
+  const startOffset = firstDay.getDay();
+  const cells = ["?", "?", "?", "?", "?", "?", "?"].map((day) => `<div class="dow">${day}</div>`);
+
+  for (let index = 0; index < startOffset; index += 1) {
+    cells.push('<div class="date muted-date"></div>');
+  }
+
+  for (let dateNumber = 1; dateNumber <= lastDate; dateNumber += 1) {
+    const date = new Date(year, month, dateNumber);
+    const iso = formatIsoDate(date);
+    const isToday = iso === formatIsoDate(today);
+    const isSelected = iso === selectedDate;
+    const titles = events.filter((event) => event.date === iso).map((event) => event.title);
+    const hasEvent = titles.length > 0;
+    const classes = ["date", isToday ? "today" : "", isSelected ? "selected" : "", hasEvent ? "has-event" : ""].filter(Boolean).join(" ");
+    const notes = hasEvent ? renderCalendarNotesForCell(titles) : "";
+    cells.push(`<div class="${classes}" data-date="${iso}"><span>${dateNumber}</span>${notes}</div>`);
+  }
+
+  element.innerHTML = cells.join("");
+}
+
+function renderCalendarNotesForCell(titles) {
+  const visibleTitles = titles.slice(0, 2);
+  const hiddenCount = Math.max(0, titles.length - visibleTitles.length);
+  const noteItems = visibleTitles.map((title) => `<small class="date-note">${escapeHtml(summarizeEventTitle(title))}</small>`);
+
+  if (hiddenCount > 0) {
+    noteItems.push(`<small class="date-note more">+${hiddenCount}</small>`);
+  }
+
+  return `<div class="date-notes">${noteItems.join("")}</div>`;
+}
+
+function summarizeEventTitle(title) {
+  const normalized = String(title)
+    .replace(/\s+/g, " ")
+    .replace("?? ", "")
+    .replace(" ??", "??")
+    .trim();
+
+  if (normalized.length <= 10) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 10)}?`;
+}
+
 function stabilizeDetailLayout() {
   if (!dashboard || !page || document.hidden) {
     return;
@@ -442,6 +552,10 @@ function stabilizeDetailLayout() {
 
   if (page === "timetable") {
     renderTimetablePage();
+  }
+
+  if (page === "calendar") {
+    renderCalendarPage();
   }
 
   queueScrollReset();
@@ -457,6 +571,22 @@ function queueLayoutRefresh() {
     layoutRefreshHandle = null;
     stabilizeDetailLayout();
   }, 120);
+}
+
+function formatIsoDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatDateDisplay(isoDate) {
+  const date = new Date(isoDate);
+  return date.toLocaleDateString("ko-KR", {
+    month: "long",
+    day: "numeric",
+    weekday: "short"
+  });
 }
 
 function parseClock(value) {

@@ -1256,7 +1256,7 @@ select {
 
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1360px) {
   .tablet-dashboard {
     display: none;
   }

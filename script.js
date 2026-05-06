@@ -125,7 +125,7 @@ function renderDashboard(data) {
   renderMiniCalendar("tabletCalendarMini", data.events || [], todayIso, appState.selectedDate);
   renderEventNotes("tabletEventList", data.events || []);
   renderDesktopCalendar("desktopCalendarBoard", data.events || [], now, appState.selectedDate);
-  renderSelectedDatePanels(appState.selectedDate);
+  renderSelectedDateContext(appState.selectedDate);
 
   renderCurrentSchedules(data, now);
 
@@ -147,11 +147,16 @@ function bindCalendarSelection() {
       }
 
       appState.selectedDate = dateCell.dataset.date;
-      renderSelectedDatePanels(appState.selectedDate);
+      renderSelectedDateContext(appState.selectedDate);
       renderMiniCalendar("tabletCalendarMini", appState.dashboard?.events || [], formatIsoDate(new Date()), appState.selectedDate);
       renderDesktopCalendar("desktopCalendarBoard", appState.dashboard?.events || [], new Date(), appState.selectedDate);
     });
   });
+}
+
+function renderSelectedDateContext(selectedDate) {
+  renderSelectedDatePanels(selectedDate);
+  renderNoticePanels(selectedDate);
 }
 
 function renderSelectedDatePanels(selectedDate) {
@@ -171,9 +176,27 @@ function buildSelectedDateContent(selectedDate, events) {
   return `${title}<ul class="selected-date-list">${items}</ul>`;
 }
 
-function renderNoticeLists(notices) {
-  renderNotices("tabletNoticeList", notices);
-  renderNotices("desktopNoticeList", notices);
+function renderNoticePanels(selectedDate) {
+  const noticeHeadingDate = selectedDate ? new Date(selectedDate) : new Date();
+  const title = formatNoticeHeading(noticeHeadingDate);
+  text("tabletNoticeTitle", title);
+  text("desktopNoticeTitle", title);
+
+  const datedNotices = buildDateNoticeEntries(selectedDate, appState.dashboard?.events || [], appState.dashboard?.notices || []);
+  renderNotices("tabletNoticeList", datedNotices);
+  renderNotices("desktopNoticeList", datedNotices);
+}
+
+function buildDateNoticeEntries(selectedDate, events, defaultNotices) {
+  const matchedEvents = (events || []).filter((item) => item.date === selectedDate);
+  if (matchedEvents.length) {
+    return matchedEvents.map((event) => ({
+      title: event.title,
+      body: "?? ?? ?????."
+    }));
+  }
+
+  return defaultNotices || [];
 }
 
 function renderLunch(lunch) {
