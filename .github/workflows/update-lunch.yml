@@ -29,20 +29,19 @@ jobs:
         run: node scripts/update-lunch.js
 
       - name: Commit changes
+        id: commit_changes
         run: |
           if git diff --quiet; then
             echo "No changes to commit"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dashboard-data.js
           git commit -m "Auto-update lunch menu"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Push changes
-        run: |
-          if git diff --cached --quiet && git diff --quiet; then
-            echo "Nothing to push"
-            exit 0
-          fi
-          git push origin main
+        if: steps.commit_changes.outputs.changed == 'true'
+        run: git push origin main
