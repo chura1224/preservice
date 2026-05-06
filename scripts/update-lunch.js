@@ -21,7 +21,7 @@ async function main() {
   });
 
   const lunchData = parseFoodsafetyWeekResponse(payload, today);
-  updateDashboardFile(lunchData, today);
+  updateDashboardFile(lunchData);
   console.log(`Updated lunchFallback for ${today.year}-${pad2(today.month)}-${pad2(today.day)}`);
 }
 
@@ -80,20 +80,20 @@ function sanitizeDishName(value) {
 function updateDashboardFile(lunchData) {
   const source = fs.readFileSync(DASHBOARD_PATH, "utf8");
   const replacement = [
-    "  lunchFallback: {",
-    `    ok: ${lunchData.ok ? "true" : "false"},`,
-    `    statusText: ${toJsString(lunchData.statusText)},`,
-    `    summary: ${toJsString(lunchData.summary)},`,
-    "    items: [",
+    '  "lunchFallback": {',
+    `    "ok": ${lunchData.ok ? "true" : "false"},`,
+    `    "statusText": ${toJsString(lunchData.statusText)},`,
+    `    "summary": ${toJsString(lunchData.summary)},`,
+    '    "items": [',
     lunchData.items.map((item) => `      ${toJsString(item)}`).join(",\n"),
     "    ]",
     "  },",
   ].join("\n");
 
-  const updated = source.replace(/  lunchFallback: \{[\s\S]*?^  \},/m, replacement);
+  const updated = source.replace(/  "lunchFallback": \{[\s\S]*?^  \},/m, replacement);
 
   if (updated === source) {
-    throw new Error("dashboard-data.js의 lunchFallback 블록을 찾지 못했습니다.");
+    throw new Error('dashboard-data.js에서 "lunchFallback" 블록을 찾지 못했습니다.');
   }
 
   fs.writeFileSync(DASHBOARD_PATH, updated, "utf8");

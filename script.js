@@ -293,7 +293,8 @@ function renderScheduleGrid(targetId, timetable, todayDayName, currentSlot, peri
     return;
   }
 
-  element.style.gridTemplateColumns = `84px repeat(${timetable.days.length}, minmax(0, 1fr))`;
+  const labelWidth = window.innerWidth <= 767 ? 68 : 84;
+  element.style.gridTemplateColumns = `${labelWidth}px repeat(${timetable.days.length}, minmax(0, 1fr))`;
   const cells = ['<div class="corner" aria-hidden="true"></div>'];
 
   timetable.days.forEach((day) => {

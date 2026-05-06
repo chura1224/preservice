@@ -13,14 +13,15 @@ window.__DASHBOARD_DATA__ = {
   },
   "lunchFallback": {
     "ok": true,
-    "statusText": "\uc624\ub298 \uae09\uc2dd",
-    "summary": "2026\ub144 5\uc6d4 6\uc77c \uc218\uc694\uc77c \uc911\uc2dd",
+    "statusText": "오늘 급식",
+    "summary": "2026년 5월 7일 목요일 중식",
     "items": [
-      "\uc0b0\ucc44\ube44\ube54\ubc25/\uc57d\uace0\ucd94\uc7a5",
-      "\ub2e4\uc2dc\ub9c8\uac10\uc790\uad6d",
-      "\uce58\ud0a8\ub610\ub760\uc544",
-      "\uc5f4\ubb34\uae40\uce58",
-      "\ucd08\ucf54\uc6b0\uc720"
+      "발아현미밥",
+      "근대된장국",
+      "우엉조림",
+      "돈까스",
+      "배추김치",
+      "금싸라기참외"
     ]
   },
   "notices": [],
