@@ -1,6 +1,7 @@
 ﻿const dashboard = window.__DASHBOARD_DATA__;
 const page = document.body.dataset.page;
 let timetableRefreshHandle = null;
+let layoutRefreshHandle = null;
 
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
@@ -10,6 +11,8 @@ resetScrollPosition();
 document.addEventListener('DOMContentLoaded', queueScrollReset);
 window.addEventListener('load', queueScrollReset);
 window.addEventListener('pageshow', queueScrollReset);
+window.addEventListener("board:unlocked", stabilizeDetailLayout);
+window.addEventListener("resize", queueLayoutRefresh);
 
 const CLEANING_SLOT = {
   id: "cleaning",
@@ -37,6 +40,9 @@ document.addEventListener("DOMContentLoaded", initializeDetailPage);
 window.addEventListener("pageshow", initializeDetailPage);
 initializeDetailPage();
 window.setTimeout(initializeDetailPage, 0);
+if (document.fonts?.ready) {
+  document.fonts.ready.then(stabilizeDetailLayout).catch(() => {});
+}
 
 function initializeDetailPage() {
   if (!dashboard || !page) {
@@ -427,6 +433,30 @@ function renderTimetablePage() {
   const currentSlot = getCurrentSlot(dashboard.periodTimes || [], now);
   renderScheduleGrid("subpagePersonalGrid", dashboard.personalTimetable, todayDayName, currentSlot, dashboard.periodTimes || []);
   renderScheduleGrid("subpageClassGrid", dashboard.classTimetable, todayDayName, currentSlot, dashboard.periodTimes || []);
+}
+
+function stabilizeDetailLayout() {
+  if (!dashboard || !page || document.hidden) {
+    return;
+  }
+
+  if (page === "timetable") {
+    renderTimetablePage();
+  }
+
+  queueScrollReset();
+  window.requestAnimationFrame(queueScrollReset);
+}
+
+function queueLayoutRefresh() {
+  if (layoutRefreshHandle) {
+    window.clearTimeout(layoutRefreshHandle);
+  }
+
+  layoutRefreshHandle = window.setTimeout(() => {
+    layoutRefreshHandle = null;
+    stabilizeDetailLayout();
+  }, 120);
 }
 
 function parseClock(value) {

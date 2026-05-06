@@ -3,6 +3,7 @@
   lunch: null,
   selectedDate: null
 };
+let layoutRefreshHandle = null;
 
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
@@ -12,6 +13,8 @@ resetScrollPosition();
 document.addEventListener('DOMContentLoaded', queueScrollReset);
 window.addEventListener('load', queueScrollReset);
 window.addEventListener('pageshow', queueScrollReset);
+window.addEventListener("board:unlocked", stabilizeDashboardLayout);
+window.addEventListener("resize", queueLayoutRefresh);
 
 const CLEANING_SLOT = {
   id: "cleaning",
@@ -57,9 +60,15 @@ async function initialize() {
   window.setInterval(refreshCurrentTimeState, 30000);
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {
-      refreshCurrentTimeState();
+      stabilizeDashboardLayout();
     }
   });
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(stabilizeDashboardLayout).catch(() => {});
+  } else {
+    window.setTimeout(stabilizeDashboardLayout, 0);
+  }
 
   try {
     const lunch = await fetchJson(`/api/lunch?date=${formatDateKey(new Date())}`);
@@ -604,6 +613,32 @@ function refreshCurrentTimeState() {
   text("tabletNoticeTitle", formatNoticeHeading(now));
   text("desktopNoticeTitle", formatNoticeHeading(now));
   renderCurrentSchedules(appState.dashboard, now);
+}
+
+function stabilizeDashboardLayout() {
+  if (!appState.dashboard) {
+    return;
+  }
+
+  refreshCurrentTimeState();
+  queueScrollReset();
+  window.requestAnimationFrame(() => {
+    refreshCurrentTimeState();
+    queueScrollReset();
+  });
+}
+
+function queueLayoutRefresh() {
+  if (layoutRefreshHandle) {
+    window.clearTimeout(layoutRefreshHandle);
+  }
+
+  layoutRefreshHandle = window.setTimeout(() => {
+    layoutRefreshHandle = null;
+    if (!document.hidden) {
+      stabilizeDashboardLayout();
+    }
+  }, 120);
 }
 
 function renderCurrentSchedules(data, now = new Date()) {

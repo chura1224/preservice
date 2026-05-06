@@ -11,6 +11,13 @@
     if (layer) {
       layer.remove();
     }
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.requestAnimationFrame(() => {
+      window.dispatchEvent(new CustomEvent("board:unlocked"));
+      window.dispatchEvent(new Event("resize"));
+    });
   };
 
   const showError = (element, message) => {
