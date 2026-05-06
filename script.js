@@ -118,7 +118,6 @@ function renderDashboard(data) {
   text("tabletNoticeTitle", formatNoticeHeading(now));
   text("desktopNoticeTitle", formatNoticeHeading(now));
 
-  renderNoticeLists(data.notices || []);
   renderQuickLinks("tabletQuickLinks", data.quickLinks || []);
   renderQuickLinks("desktopQuickLinks", data.quickLinks || []);
 
@@ -192,7 +191,7 @@ function buildDateNoticeEntries(selectedDate, events, defaultNotices) {
   if (matchedEvents.length) {
     return matchedEvents.map((event) => ({
       title: event.title,
-      body: "?? ?? ?????."
+      body: "해당 날짜 일정입니다."
     }));
   }
 
