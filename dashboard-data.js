@@ -24,6 +24,17 @@ window.__DASHBOARD_DATA__ = {
     ]
   },
   "notices": [],
+  "datedNotices": [
+    {
+      "date": "2026-05-07",
+      "items": [
+        {
+          "title": "\uc544\uce68 \uc870\ud68c \uc804\ub2ec\uc0ac\ud56d",
+          "body": "- \ubaa8\ubc94 \ud559\uc0dd \ud22c\ud45c \uccb4\ud06c\n- \ud0d0\uad6c \ubcf4\uace0\uc11c \uc2e0\uccad \uc7ac\uc548\ub0b4"
+        }
+      ]
+    }
+  ],
   "events": [
     {
       "date": "2026-05-01",

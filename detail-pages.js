@@ -79,7 +79,15 @@ function initializeDetailPage() {
   if (page === "notices") {
     text("noticesSectionTitle", "전달사항");
     text("noticesSectionDescription", "메인 화면에 있는 전달사항을 한 페이지에서 편하게 확인할 수 있습니다.");
-    renderNoticesPage("noticesPageList", dashboard.notices || []);
+    renderNoticesPage(
+      "noticesPageList",
+      buildDateNoticeEntries(
+        formatIsoDate(new Date()),
+        dashboard.events || [],
+        dashboard.notices || [],
+        dashboard.datedNotices || []
+      )
+    );
   }
 
   if (page === "timetable") {
@@ -225,6 +233,23 @@ function renderNoticesPage(targetId, notices) {
       `;
     })
     .join("");
+}
+
+function buildDateNoticeEntries(selectedDate, events, defaultNotices, datedNotices) {
+  const matchedNoticeGroup = (datedNotices || []).find((item) => item.date === selectedDate);
+  if (matchedNoticeGroup?.items?.length) {
+    return matchedNoticeGroup.items;
+  }
+
+  const matchedEvents = (events || []).filter((item) => item.date === selectedDate);
+  if (matchedEvents.length) {
+    return matchedEvents.map((event) => ({
+      title: event.title,
+      body: "해당 날짜 일정입니다."
+    }));
+  }
+
+  return defaultNotices || [];
 }
 
 function renderScheduleGrid(targetId, timetable, todayDayName, currentSlot, periodTimes) {

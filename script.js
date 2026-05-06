@@ -181,12 +181,22 @@ function renderNoticePanels(selectedDate) {
   text("tabletNoticeTitle", title);
   text("desktopNoticeTitle", title);
 
-  const datedNotices = buildDateNoticeEntries(selectedDate, appState.dashboard?.events || [], appState.dashboard?.notices || []);
+  const datedNotices = buildDateNoticeEntries(
+    selectedDate,
+    appState.dashboard?.events || [],
+    appState.dashboard?.notices || [],
+    appState.dashboard?.datedNotices || []
+  );
   renderNotices("tabletNoticeList", datedNotices);
   renderNotices("desktopNoticeList", datedNotices);
 }
 
-function buildDateNoticeEntries(selectedDate, events, defaultNotices) {
+function buildDateNoticeEntries(selectedDate, events, defaultNotices, datedNotices) {
+  const matchedNoticeGroup = (datedNotices || []).find((item) => item.date === selectedDate);
+  if (matchedNoticeGroup?.items?.length) {
+    return matchedNoticeGroup.items;
+  }
+
   const matchedEvents = (events || []).filter((item) => item.date === selectedDate);
   if (matchedEvents.length) {
     return matchedEvents.map((event) => ({
