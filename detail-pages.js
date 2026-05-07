@@ -675,9 +675,6 @@ function stabilizeDetailLayout() {
   if (page === "calendar") {
     renderCalendarPage();
   }
-
-  queueScrollReset();
-  window.requestAnimationFrame(queueScrollReset);
 }
 
 function queueLayoutRefresh() {

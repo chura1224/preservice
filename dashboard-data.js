@@ -435,7 +435,7 @@ window.__DASHBOARD_DATA__ = {
     },
     {
       "zone": "\uccad\uc18c\uad00\ub9ac\ubd80\uc7a5",
-      "team": "3\uc6d4 \uae40\ub3c4\uc728 / 4\uc6d4 \ucd5c\ucc3d\uc544"
+      "team": "5\uc6d4 \uae40\ub3c4\uc728 / 6\uc6d4 \ucd5c\ucc3d\uc544"
     },
     {
       "zone": "\uad50\uc2e4 \uc4f8\uae30",
