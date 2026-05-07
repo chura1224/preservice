@@ -472,6 +472,100 @@ select {
   display: block;
 }
 
+.mobile-timetable-board {
+  display: none;
+}
+
+.mobile-day-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.mobile-day-tab {
+  min-width: 48px;
+  min-height: 40px;
+  border: 1px solid rgba(237, 215, 243, 0.9);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.mobile-day-tab.today {
+  color: var(--lavender);
+}
+
+.mobile-day-tab.active {
+  border-color: rgba(207, 127, 243, 0.72);
+  background: linear-gradient(180deg, rgba(244, 231, 251, 0.95), rgba(255, 255, 255, 0.96));
+  color: var(--lavender);
+  box-shadow: 0 10px 20px rgba(207, 127, 243, 0.14);
+}
+
+.mobile-schedule-card + .mobile-schedule-card {
+  margin-top: 14px;
+}
+
+.mobile-day-schedule {
+  display: grid;
+  gap: 10px;
+}
+
+.mobile-schedule-item {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(237, 215, 243, 0.88);
+}
+
+.mobile-schedule-item.live {
+  border: 2px solid rgba(207, 127, 243, 0.86);
+  box-shadow: 0 0 0 4px rgba(207, 127, 243, 0.08);
+}
+
+.mobile-schedule-item.cleaning {
+  border-style: dashed;
+  background: linear-gradient(180deg, rgba(249, 246, 255, 0.72), rgba(255, 255, 255, 0.96));
+}
+
+.mobile-schedule-meta strong,
+.mobile-schedule-meta span {
+  display: block;
+}
+
+.mobile-schedule-meta strong {
+  font-size: 0.95rem;
+}
+
+.mobile-schedule-meta span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.73rem;
+}
+
+.mobile-schedule-value {
+  min-width: 0;
+  text-align: center;
+}
+
+.mobile-schedule-value .schedule-line {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.18;
+}
+
+.mobile-schedule-empty {
+  color: var(--muted);
+}
+
 .panel-head {
   display: flex;
   justify-content: space-between;
@@ -1292,46 +1386,11 @@ select {
     padding: 18px;
   }
 
-  .desktop-timetable-row {
-    grid-template-columns: 1fr;
+  body[data-page="timetable"] .mobile-timetable-board {
+    display: block;
   }
 
-  body[data-page="timetable"] .desktop-list-card {
-    overflow-x: auto;
-  }
-
-  body[data-page="timetable"] .period-grid {
-    min-width: 620px;
-    column-gap: 8px;
-    row-gap: 8px;
-  }
-
-  body[data-page="timetable"] .period-grid .day-header {
-    min-height: 36px;
-    font-size: 0.9rem;
-  }
-
-  body[data-page="timetable"] .period-grid .label,
-  body[data-page="timetable"] .period-grid .cell {
-    min-height: 58px;
-  }
-
-  body[data-page="timetable"] .period-grid .cell {
-    padding: 8px 6px;
-  }
-
-  body[data-page="timetable"] .period-grid .label-period {
-    font-size: 0.86rem;
-  }
-
-  body[data-page="timetable"] .period-grid .label-time {
-    margin-top: 2px;
-    font-size: 0.67rem;
-  }
-
-  body[data-page="timetable"] .schedule-text {
-    gap: 2px;
-    font-size: 0.82rem;
-    line-height: 1.12;
+  body[data-page="timetable"] .desktop-timetable-row {
+    display: none;
   }
 }

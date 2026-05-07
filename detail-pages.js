@@ -1,7 +1,8 @@
 ﻿const dashboard = window.__DASHBOARD_DATA__;
 const page = document.body.dataset.page;
 const detailState = {
-  selectedDate: formatIsoDate(new Date())
+  selectedDate: formatIsoDate(new Date()),
+  selectedTimetableDay: null
 };
 let timetableRefreshHandle = null;
 let layoutRefreshHandle = null;
@@ -69,9 +70,9 @@ function initializeDetailPage() {
   }
 
   if (page === "calendar") {
-    text("calendarSectionTitle", `${dashboard.board?.roomLabel || "2?? 5?"} ?? ???`);
-    text("calendarSectionDescription", "??? ??? ?? ?? ??? ???? ?? ??? ? ????.");
-    text("calendarPageMonthBadge", `${new Date().getMonth() + 1}?`);
+    text("calendarSectionTitle", `${dashboard.board?.roomLabel || "2학년 5반"} 월간 일정`);
+    text("calendarSectionDescription", "월간 학사 일정을 날짜별로 확인할 수 있습니다.");
+    text("calendarPageMonthBadge", `${new Date().getMonth() + 1}월`);
     renderCalendarPage();
     bindCalendarPageSelection();
   }
@@ -468,8 +469,99 @@ function renderTimetablePage() {
   const now = new Date();
   const todayDayName = dayName(now.getDay());
   const currentSlot = getCurrentSlot(dashboard.periodTimes || [], now);
+  detailState.selectedTimetableDay = detailState.selectedTimetableDay || getInitialTimetableDay(todayDayName);
+
+  renderMobileTimetablePage(todayDayName, currentSlot);
   renderScheduleGrid("subpagePersonalGrid", dashboard.personalTimetable, todayDayName, currentSlot, dashboard.periodTimes || []);
   renderScheduleGrid("subpageClassGrid", dashboard.classTimetable, todayDayName, currentSlot, dashboard.periodTimes || []);
+}
+
+function getInitialTimetableDay(todayDayName) {
+  return ["월", "화", "수", "목", "금"].includes(todayDayName) ? todayDayName : "월";
+}
+
+function renderMobileTimetablePage(todayDayName, currentSlot) {
+  renderMobileDayTabs("mobileTimetableDayTabs", detailState.selectedTimetableDay, todayDayName);
+  renderMobileDaySchedule("mobilePersonalSchedule", dashboard.personalTimetable, detailState.selectedTimetableDay, currentSlot, dashboard.periodTimes || []);
+  renderMobileDaySchedule("mobileClassSchedule", dashboard.classTimetable, detailState.selectedTimetableDay, currentSlot, dashboard.periodTimes || []);
+  bindMobileDayTabs();
+}
+
+function bindMobileDayTabs() {
+  const element = document.getElementById("mobileTimetableDayTabs");
+  if (!element || element.dataset.bound === "true") {
+    return;
+  }
+
+  element.dataset.bound = "true";
+  element.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-day]");
+    if (!button) {
+      return;
+    }
+    detailState.selectedTimetableDay = button.dataset.day;
+    renderTimetablePage();
+  });
+}
+
+function renderMobileDayTabs(targetId, selectedDay, todayDayName) {
+  const element = document.getElementById(targetId);
+  if (!element) {
+    return;
+  }
+
+  const days = ["월", "화", "수", "목", "금"];
+  element.innerHTML = days
+    .map((day) => {
+      const classes = [
+        "mobile-day-tab",
+        day === selectedDay ? "active" : "",
+        day === todayDayName ? "today" : ""
+      ].filter(Boolean).join(" ");
+
+      return `<button type="button" class="${classes}" data-day="${day}">${day}</button>`;
+    })
+    .join("");
+}
+
+function renderMobileDaySchedule(targetId, timetable, selectedDay, currentSlot, periodTimes) {
+  const element = document.getElementById(targetId);
+  if (!element || !timetable) {
+    return;
+  }
+
+  const dayIndex = (timetable.days || []).indexOf(selectedDay);
+  if (dayIndex < 0) {
+    element.innerHTML = '<div class="mobile-schedule-empty">표시할 시간표가 없습니다.</div>';
+    return;
+  }
+
+  const rows = buildScheduleRows(timetable.rows || [], periodTimes || [], timetable.days || []);
+    const items = rows
+      .filter((row) => !shouldHideSlot(selectedDay, row.id))
+      .map((row) => {
+        const value = row.values[dayIndex] || "-";
+        const isCleaningRow = row.id === CLEANING_SLOT.id;
+        const isLive = selectedDay === dayName(new Date().getDay()) && row.id === currentSlot;
+        const classes = [
+          "mobile-schedule-item",
+          isCleaningRow ? "cleaning" : "",
+          isLive ? "live" : "",
+          getScheduleTone(value, Boolean(row.isClassTimetable))
+        ].filter(Boolean).join(" ");
+
+        return `
+          <article class="${classes}">
+            <div class="mobile-schedule-meta">
+              <strong>${escapeHtml(row.label)}</strong>
+              <span>${escapeHtml(row.time)}</span>
+            </div>
+            <div class="mobile-schedule-value">${scheduleTextToHtml(value)}</div>
+          </article>
+        `;
+      });
+
+  element.innerHTML = items.join("");
 }
 
 function renderCalendarPage() {
@@ -506,7 +598,7 @@ function renderCalendarSelectedContent(selectedDate) {
 function buildSelectedDateContent(selectedDate, events) {
   const title = `<strong>${escapeHtml(formatDateDisplay(selectedDate))}</strong>`;
   if (!events.length) {
-    return `${title}<div class="selected-date-empty">??? ??? ????.</div>`;
+    return `${title}<div class="selected-date-empty">등록된 일정이 없습니다.</div>`;
   }
 
   const items = events.map((event) => `<li>${escapeHtml(event.title)}</li>`).join("");
@@ -524,7 +616,7 @@ function renderCalendarBoard(targetId, events, today, selectedDate) {
   const firstDay = new Date(year, month, 1);
   const lastDate = new Date(year, month + 1, 0).getDate();
   const startOffset = firstDay.getDay();
-  const cells = ["?", "?", "?", "?", "?", "?", "?"].map((day) => `<div class="dow">${day}</div>`);
+  const cells = ["일", "월", "화", "수", "목", "금", "토"].map((day) => `<div class="dow">${day}</div>`);
 
   for (let index = 0; index < startOffset; index += 1) {
     cells.push('<div class="date muted-date"></div>');
@@ -560,15 +652,15 @@ function renderCalendarNotesForCell(titles) {
 function summarizeEventTitle(title) {
   const normalized = String(title)
     .replace(/\s+/g, " ")
-    .replace("?? ", "")
-    .replace(" ??", "??")
+    .replace("시간 ", "")
+    .replace(" 방문", "방문")
     .trim();
 
   if (normalized.length <= 10) {
     return normalized;
   }
 
-  return `${normalized.slice(0, 10)}?`;
+  return `${normalized.slice(0, 10)}…`;
 }
 
 function stabilizeDetailLayout() {
