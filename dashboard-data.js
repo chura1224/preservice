@@ -608,7 +608,9 @@ window.__DASHBOARD_DATA__ = {
     {
       "role": "\uc5d0\ub108\uc9c0 \uc9c0\ud0a4\ubbf8",
       "count": 1,
-      "students": [],
+      "students": [
+        "\uc11c\uc5ec\ubbfc"
+      ],
       "duty": "\uc804\uc6d0 \uad00\ub9ac, \uad50\uc2e4 \ud658\uae30"
     },
     {
@@ -619,20 +621,30 @@ window.__DASHBOARD_DATA__ = {
     },
     {
       "role": "\ud734\ub300\ud3f0 \ub3c4\uc6b0\ubbf8",
-      "count": 0,
-      "students": [],
+      "count": 2,
+      "students": [
+        "\uae40\ub3c4\uc724",
+        "\uc7a5\ubbf8\uac15"
+      ],
       "duty": "\ud734\ub300\ud3f0 \uc218\uac70"
     },
     {
       "role": "\ubd84\ub9ac\uc218\uac70",
-      "count": 2,
-      "students": [],
+      "count": 3,
+      "students": [
+        "\uc774\uac74\ud76c",
+        "\uc720\uc2b9\uc5b8",
+        "\uc720\uac00\uc601"
+      ],
       "duty": "\uc0dd\ud65c \uc18d \ubd84\ub9ac\uc218\uac70 \uad00\ub9ac"
     },
     {
       "role": "\uce60\ud310\u00b7\uad50\ud0c1",
       "count": 2,
-      "students": [],
+      "students": [
+        "\uae40\ubcf4\uc740",
+        "\uae40\ub3c4\uc740"
+      ],
       "duty": "\uce60\ud310 \uccad\uc18c, \ubd84\ud544 \ubc0f \uc9c0\uc6b0\uac1c \uc0c1\ud0dc \ud655\uc778, \uad50\ud0c1 \uc815\ub9ac"
     }
   ],
