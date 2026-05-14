@@ -12,11 +12,17 @@ window.__DASHBOARD_DATA__ = {
     }
   },
   "lunchFallback": {
-    "ok": false,
-    "statusText": "오늘 급식 없음",
-    "summary": "2026년 5월 14일 목요일 급식 정보 없음",
+    "ok": true,
+    "statusText": "오늘 급식",
+    "summary": "2026년 5월 15일 금요일 중식",
     "items": [
-      "등록된 급식 정보가 없습니다."
+      "흑미밥",
+      "배추된장국",
+      "계란찜",
+      "숙주나물무침",
+      "오징어떡볶음",
+      "배추김치",
+      "카스테라"
     ]
   },
   "notices": [],
