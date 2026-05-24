@@ -12,16 +12,11 @@ window.__DASHBOARD_DATA__ = {
     }
   },
   "lunchFallback": {
-    "ok": true,
-    "statusText": "오늘 급식",
-    "summary": "2026년 5월 22일 금요일 중식",
+    "ok": false,
+    "statusText": "오늘 급식 없음",
+    "summary": "2026년 5월 25일 월요일 급식 정보 없음",
     "items": [
-      "김가루양념밥",
-      "어묵무국",
-      "고추장떡볶이",
-      "꼬지바",
-      "야채튀김",
-      "쥬스"
+      "등록된 급식 정보가 없습니다."
     ]
   },
   "notices": [],
